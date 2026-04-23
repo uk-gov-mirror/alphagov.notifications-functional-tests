@@ -70,12 +70,19 @@ def test_attaching_a_file_to_an_email_template_and_also_removing_the_file(driver
 
 @recordtime
 @pytest.mark.xdist_group(name="send-files-via-ui-flow")
-def test_send_one_off_email_with_file_via_ui(driver, login_seeded_user):
+@pytest.mark.parametrize(
+    "template_name, recipient_type",
+    [
+        (f"Functional Tests - send email with file via csv - {uuid.uuid4()}", "one_recipient"),
+        (f"Functional Tests - send one off email with file via ui - {uuid.uuid4()}", "csv_of_recipients"),
+    ],
+)
+def test_sending_an_email_notification_with_a_file_attached(driver, login_seeded_user, template_name, recipient_type):
     # # Creat an email template and attach a file to it
-    template_name = f"Functional Tests - send one off email with file via ui - {uuid.uuid4()}"
+    template_name = template_name
     content = "Testing sending a one off email notification. with an email file. Test file below:"
     file_name = "attachment.pdf"
-    create_an_email_template_and_attach_a_file(driver, file_name, template_name, content)
+    template_id = create_an_email_template_and_attach_a_file(driver, file_name, template_name, content)
 
     # Confirm file has been attached to template on the Preview email template page
     assert_file_has_been_attached_to_email_template(driver, template_name)
@@ -101,7 +108,11 @@ def test_send_one_off_email_with_file_via_ui(driver, login_seeded_user):
 
     # Send the email
     assert new_link_text in view_email_template_page.get_email_message_body_content()
-    send_email_notification_with_file_attached_to_one_recipient(driver, view_email_template_page, template_name)
+    if recipient_type == "one_recipient":
+        send_email_notification_with_file_attached_to_one_recipient(driver, view_email_template_page, template_name)
+
+    elif recipient_type == "csv_of_recipients":
+        send_email_notification_with_file_attached_via_csv(driver, template_id, template_name, view_email_template_page)
 
     # Confirm that the email is being delivered
     send_email_confirmation_page = SentEmailMessagePage(driver)
@@ -267,62 +278,6 @@ def test_send_file_via_ui_preview_pages(driver, login_seeded_user, download_dire
     assert view_email_template_page.get_h1_text() == "Templates"
     templates_page = ShowTemplatesPage(driver)
     templates_page.click_template_by_link_text(template_name)
-    assert view_email_template_page.get_h1_text() == template_name
-    delete_email_template_for_send_file_via_ui_tests(driver, view_email_template_page, template_name)
-
-
-@recordtime
-@pytest.mark.xdist_group(name="send-files-via-ui-flow")
-def test_send_email_notification_with_an_email_file_via_csv(driver, login_seeded_user):
-    # Creat an email template and attach a file to it
-    template_name = f"Functional Tests - send email with file via csv - {uuid.uuid4()}"
-    content = "Testing sending a one off email notification. with an email file. Test file below:"
-    file_name = "attachment.pdf"
-    template_id = create_an_email_template_and_attach_a_file(driver, file_name, template_name, content)
-
-    # Confirm file has been attached to template on the Preview email template page
-    assert_file_has_been_attached_to_email_template(driver, template_name)
-
-    # Go to the individual file management page
-    view_email_template_page = ViewEmailTemplatePage(driver)
-    manage_a_file_page, manage_files_page = go_to_file_management_page_from_email_template_preview(
-        driver, file_name, view_email_template_page
-    )
-
-    # Change the link text
-    link_text_label = "Link text"
-    new_link_text = "file_download_link"
-    change_email_template_file_link_text(driver, manage_a_file_page, link_text_label, new_link_text, file_name)
-
-    # Confirm link text change
-    assert manage_a_file_page.get_file_setting_value(link_text_label) == new_link_text
-
-    # Go to the email template preview page
-    go_back_to_email_template_from_file_management_page(
-        file_name, manage_a_file_page, template_name, view_email_template_page
-    )
-
-    # Send the email
-    assert new_link_text in view_email_template_page.get_email_message_body_content()
-    send_email_notification_with_file_attached_via_csv(driver, template_id, template_name, view_email_template_page)
-
-    # Confirm that the email is being delivered
-    send_email_confirmation_page = SentEmailMessagePage(driver)
-    assert_email_notification_with_a_file_attached_was_sent(send_email_confirmation_page)
-
-    # Confirm that the file download link sent to the recipient works
-    # There are smoke tests and other tests covering the process of a recipient downloading
-    # a document, so the whole journey will not be covered here. we will just check that the link
-    # goes to the download page and that it is not the preview landing page
-    assert_send_file_via_ui_file_download_links_work_as_expected(driver, new_link_text, send_email_confirmation_page)
-
-    # Go to service templates page and select the template
-    document_download_landing_page = DocumentDownloadLandingPage(driver)
-    go_to_email_template_preview_page_from_a_document_download_pages(
-        driver, template_name, document_download_landing_page
-    )
-
-    # Delete the template
     assert view_email_template_page.get_h1_text() == template_name
     delete_email_template_for_send_file_via_ui_tests(driver, view_email_template_page, template_name)
 
