@@ -3,7 +3,7 @@ import os
 import re
 import shutil
 from typing import Literal
-from urllib.parse import urlparse, urlsplit
+from urllib.parse import urljoin, urlparse, urlsplit
 
 from retry import retry
 from selenium.common.exceptions import (
@@ -303,9 +303,20 @@ class BasePage:
 
 class PageWithStickyNavMixin:
     def scrollToRevealElement(self, selector=None, xpath=None, stuckToBottom=True):
-        namespace = "window.GOVUK.stickAtBottomWhenScrolling"
-        if stuckToBottom is False:
-            namespace = "window.GOVUK.stickAtTopWhenScrolling"
+
+        current_url = self.driver.current_url
+        
+        if "staging-notify.works" in current_url:
+            base_url = "https://static.staging-notify.works"
+        else:
+            # Fallback to the url from the globally imported config
+            base_url = config["notify_admin_url"]
+
+        module_url = f"{base_url}/assets/javascripts/esm/stick-to-window-when-scrolling.mjs"
+
+        # Flattened directly onto window
+        prop_name = "stickAtBottomWhenScrolling" if stuckToBottom else "stickAtTopWhenScrolling"
+        namespace = f"window.{prop_name}"
 
         if selector is not None:
             js_str = (
@@ -314,15 +325,29 @@ class PageWithStickyNavMixin:
             )
             self.driver.execute_script(js_str)
         elif xpath is not None:
-            js_str = f"""(function (document) {{
-                             if ('scrollToRevealElement' in {namespace}) {{
-                                 var matches = document.evaluate("{xpath}", document, null, XPathResult.ANY_TYPE, null);
-                                 if (matches) {{
-                                     {namespace}.scrollToRevealElement(matches.iterateNext());
-                                 }}
-                             }}
-                         }}(document));"""
-            self.driver.execute_script(js_str)
+            element = f'(document.evaluate("{xpath}", document, null, XPathResult.ANY_TYPE, null)).iterateNext()'
+        else:
+            return
+
+        js_str = f"""
+        var callback = arguments[arguments.length - 1];
+        
+        import('{module_url}')
+            .then(module => {{
+                window['{prop_name}'] = module.default || module;
+
+                if ({namespace} && typeof {namespace}.scrollToRevealElement === 'function') {{
+                    var targetNode = {element};
+                    if (targetNode) {namespace}.scrollToRevealElement(targetNode);
+                }}
+                callback(null);
+            }})
+            .catch(err => callback('JS Import Error: ' + err.message));
+        """
+
+        error_msg = self.driver.execute_async_script(js_str)
+        if error_msg:
+            raise RuntimeError(error_msg)
 
 
 class HomePage(BasePage):
