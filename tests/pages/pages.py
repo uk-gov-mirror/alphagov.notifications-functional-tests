@@ -310,7 +310,8 @@ class PageWithStickyNavMixin:
 
         if selector is not None:
             js_str = (
-                f"if ('scrollToRevealElement' in {namespace}){namespace}.scrollToRevealElement(document.querySelector('{selector}'))"
+                f"if ('scrollToRevealElement' in {namespace}){namespace}."
+                "scrollToRevealElement(document.querySelector('{selector}'))"
             )
             self.driver.execute_script(js_str)
         elif xpath is not None:
