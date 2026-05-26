@@ -292,7 +292,7 @@ def test_upload_send_via_emergency_contact_list(driver, login_seeded_user, clien
 
 
 @recordtime
-def test_edit_and_delete_email_template(driver, login_seeded_user, client_live_key):
+def test_edit_and_delete_email_template(driver, login_seeded_user):
     template_name = f"edit/delete email template test {uuid.uuid4()}"
     go_to_templates_page(driver)
 
@@ -324,7 +324,7 @@ def test_edit_and_delete_email_template(driver, login_seeded_user, client_live_k
 
 
 @recordtime
-def test_edit_and_delete_sms_template(driver, login_seeded_user, client_live_key):
+def test_edit_and_delete_sms_template(driver, login_seeded_user):
     template_name = f"edit/delete sms template test {uuid.uuid4()}"
     go_to_templates_page(driver)
 
@@ -356,7 +356,7 @@ def test_edit_and_delete_sms_template(driver, login_seeded_user, client_live_key
 
 
 @recordtime
-def test_edit_and_delete_letter_template(driver, login_seeded_user, client_live_key):
+def test_edit_and_delete_letter_template(driver, login_seeded_user):
     template_name = f"edit/delete letter template test {uuid.uuid4()}"
     go_to_templates_page(driver)
 
@@ -373,7 +373,7 @@ def test_edit_and_delete_letter_template(driver, login_seeded_user, client_live_
 
 
 @recordtime
-def test_send_bilingual_letter(driver, login_seeded_user, client_live_key, download_directory):
+def test_send_bilingual_letter(driver, login_seeded_user, download_directory):
     template_name = f"send bilingual letter template test {uuid.uuid4()}"
     go_to_templates_page(driver)
 
@@ -535,7 +535,7 @@ def test_send_email_with_placeholders_to_one_recipient(request, driver, client_l
 
 
 @recordtime
-def test_send_sms_with_placeholders_to_one_recipient(driver, client_live_key, login_seeded_user):
+def test_send_sms_with_placeholders_to_one_recipient(driver, login_seeded_user):
     go_to_templates_page(driver)
     template_name = f"sms with placeholders {uuid.uuid4()}"
     content = "Hi ((name)), Is ((phone number)) your mobile number? We want to send you some ((things))"
