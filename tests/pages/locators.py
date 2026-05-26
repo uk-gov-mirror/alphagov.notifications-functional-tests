@@ -79,15 +79,6 @@ class NavigationLocators:
     PROFILE_LINK = (By.LINK_TEXT, "Your account")
 
 
-class TemplatePageLocators:
-    SEND_TEST_MESSAGES_LINK = (By.LINK_TEXT, "Send text messages")
-    SEND_EMAIL_LINK = (By.LINK_TEXT, "Send emails")
-    ADD_NEW_TEMPLATE_LINK = (By.LINK_TEXT, "Add new template")
-    ADD_A_NEW_TEMPLATE_LINK = (By.LINK_TEXT, "Add a new template")
-    EDIT_TEMPLATE_LINK = (By.LINK_TEXT, "Edit template")
-    UPLOAD_RECIPIENTS_LINK = (By.LINK_TEXT, "Upload recipients")
-
-
 class EditTemplatePageLocators:
     TEMPLATE_SUBJECT_INPUT = (By.NAME, "subject")
     TEMPLATE_CONTENT_INPUT = (By.NAME, "template_content")
