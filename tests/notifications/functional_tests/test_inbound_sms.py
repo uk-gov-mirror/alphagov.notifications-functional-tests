@@ -24,7 +24,6 @@ from tests.pages import ConversationPage, DashboardPage, InboxPage
 
 @pytest.fixture(scope="function")
 def inbound_sms():
-    # the message has the func test user's name in it - which has a unique uuid
     message = f"Inbound message from {uuid.uuid4()}"
 
     # hand-craft a request to receive messages API.
