@@ -8,25 +8,34 @@ from selenium.webdriver.common.by import By
 
 from config import config, generate_unique_email
 from tests.pages import (
+    AddFileToEmailTemplatePage,
     ChangeLinkTextForEmailFilePage,
     ChangeRentionPeriodForEmailFilePage,
     DocumentDownloadLandingPage,
     EmailConfirmationSettingForEmailFilePage,
+    JobPage,
     ManageEmailTemplateFilePage,
     ManageFilesForEmailTemplatePage,
     PreviewConfirmYourEmailAddressPage,
     PreviewDownloadYourFilePage,
     PreviewYouHaveAFileToDownloadPage,
+    SendEmailPreviewPage,
+    SendFilesViaUiUploadCsvPage,
+    SendOneRecipientPage,
+    SendSetSenderPage,
+    SendViaCsvPage,
+    SendViaCsvPreviewPage,
     SentEmailMessagePage,
     ShowTemplatesPage,
-    ViewEmailTemplatePage, AddFileToEmailTemplatePage, JobPage, SendViaCsvPreviewPage, SendFilesViaUiUploadCsvPage,
-    SendViaCsvPage, SendSetSenderPage, SendEmailPreviewPage, SendOneRecipientPage,
+    ViewEmailTemplatePage,
 )
 from tests.test_utils import (
+    create_email_template,
+    create_temp_csv,
     get_downloaded_document,
+    go_to_templates_page,
     go_to_view_template_page,
     recordtime,
-    create_email_template, go_to_templates_page, create_temp_csv,
 )
 
 
@@ -58,8 +67,8 @@ def test_attach_a_file_to_an_email_template_and_then_remove_the_file(driver, log
 @pytest.mark.parametrize(
     "template_name, recipient_type",
     [
-        (f"Functional Tests - send one off email with file via ui", "one_recipient"),
-        (f"Functional Tests - send email with file via csv", "csv_of_recipients"),
+        ("Functional Tests - send one off email with file via ui", "one_recipient"),
+        ("Functional Tests - send email with file via csv", "csv_of_recipients"),
     ],
 )
 def test_sending_an_email_notification_with_a_file_attached(driver, login_seeded_user, template_name, recipient_type):
@@ -373,4 +382,3 @@ def assert_file_has_been_attached_to_email_template(driver, template_name):
     view_email_template_page = ViewEmailTemplatePage(driver)
     assert view_email_template_page.get_h1_text() == template_name
     assert view_email_template_page.get_file_added_count_text() == "1 file added"
-

@@ -59,7 +59,6 @@ from tests.pages.locators import (
     SingleRecipientLocators,
     SmsSenderLocators,
     TeamMembersPageLocators,
-    TemplatePageLocators,
     VerifyPageLocators,
     ViewEmailTemplatePageLocators,
     ViewLetterTemplatePageLocators,
@@ -310,7 +309,8 @@ class PageWithStickyNavMixin:
 
         if selector is not None:
             js_str = (
-                f"if ('scrollToRevealElement' in {namespace}){namespace}.scrollToRevealElement(document.querySelector('{selector}'))"
+                f"if ('scrollToRevealElement' in {namespace}){namespace}."
+                "scrollToRevealElement(document.querySelector('{selector}'))"
             )
             self.driver.execute_script(js_str)
         elif xpath is not None:
@@ -807,15 +807,6 @@ class ShowTemplatesPage(PageWithStickyNavMixin, BasePage):
         return [element.get_attribute("textContent").strip() for element in elements]
 
 
-class SendSmsTemplatePage(BasePage):
-    new_sms_template_link = TemplatePageLocators.ADD_NEW_TEMPLATE_LINK
-    edit_sms_template_link = TemplatePageLocators.EDIT_TEMPLATE_LINK
-
-    def click_add_new_template(self):
-        element = self.wait_for_element(SendSmsTemplatePage.new_sms_template_link)
-        element.click()
-
-
 class EditSmsTemplatePage(BasePage):
     name_input = NameInputElement(clear=True)
     template_content_input = TemplateContentElement(clear=True)
@@ -1088,20 +1079,6 @@ class ConfirmEditLetterTemplatePage(BasePage):
 
     def click_save(self):
         element = self.wait_for_element(ConfirmEditLetterTemplatePage.save_button)
-        element.click()
-
-
-class SendEmailTemplatePage(BasePage):
-    add_a_new_email_template_link = TemplatePageLocators.ADD_A_NEW_TEMPLATE_LINK
-    add_new_email_template_link = TemplatePageLocators.ADD_NEW_TEMPLATE_LINK
-    edit_email_template_link = TemplatePageLocators.EDIT_TEMPLATE_LINK
-
-    def click_add_a_new_template(self):
-        element = self.wait_for_element(SendEmailTemplatePage.add_a_new_email_template_link)
-        element.click()
-
-    def click_add_new_template(self):
-        element = self.wait_for_element(SendEmailTemplatePage.add_new_email_template_link)
         element.click()
 
 

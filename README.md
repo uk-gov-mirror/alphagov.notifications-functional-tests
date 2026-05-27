@@ -139,7 +139,8 @@ We use the following annotations on test methods to define the groups:
 @pytest.mark.xdist_group(name="registration-flow")
 @pytest.mark.xdist_group(name="api-client")
 @pytest.mark.xdist_group(name="seeded-email")
-@pytest.mark.xdist_group(name="api-letters")
+@pytest.mark.xdist_group(name="send-files-via-ui-flow")
+@pytest.mark.xdist_group(name="join-service-request-flow")
 ```
 
 More groups generally equals better parallelisation (limited by test runner count). However, in the case of functional tests, increased parallelisation increases the risk of side effects and race conditions in the shared environment unless grouped carefully.
@@ -162,7 +163,7 @@ To purge test data from a non-production environment (i.e. staging):
 1. Take the snapshot of notify-db in rds and also take database dump locally. See [DB-Commands](https://github.com/alphagov/notifications-manuals/wiki/DB-Commands) for the database dump and restore.
 2. Pause deployment pipeline for the environment.
 3. ssh into ecs `api-web` service.
-4. Run `flask command purge-functional-test-data -u notify-tests-preview` to delete user data objects. 
+4. Run `flask command purge-functional-test-data -u notify-tests-preview` to delete user data objects.
   * note: takes a while! multiple hours!
 5. Manually delete organisation 'Functional Test Org'.
 6. Unpause the pipeline and manually trigger `start-deploy` - as part of the deploy, the functional test fixtures should be recreated.
