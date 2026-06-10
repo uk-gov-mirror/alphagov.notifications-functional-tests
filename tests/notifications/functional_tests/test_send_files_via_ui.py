@@ -71,7 +71,7 @@ def test_attach_a_file_to_an_email_template_and_then_remove_the_file(driver, log
         ("Functional Tests - send email with file via csv", "csv_of_recipients"),
     ],
 )
-def test_sending_an_email_notification_with_a_file_attached(driver, login_seeded_user, template_name, recipient_type):
+def test_send_an_email_notification_with_a_file_attached(driver, login_seeded_user, template_name, recipient_type):
     # Create an email template and attach a file to it
     # The uuid cannot be added to the template name in pytest.mark.parametrize method as the various workers engaged
     # during parallelization would have different uuids in the template name and throw diff errors during the test runs

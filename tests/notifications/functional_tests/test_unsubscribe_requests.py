@@ -34,7 +34,7 @@ def test_unsubscribe_request_flow(request, driver, login_seeded_user, client_liv
     dashboard_page.go_to_dashboard_for_service(service_id=config["service"]["id"])
     dashboard_email_unsubscribe_stats_before = dashboard_page.get_email_unsubscribe_requests_count()
 
-    # Send first notification via api
+    # Send first notification via UI
     send_notification_to_one_recipient(
         driver,
         template_name,
@@ -64,7 +64,7 @@ def test_unsubscribe_request_flow(request, driver, login_seeded_user, client_liv
     resp = client_live_key.post(generated_one_click_unsubscribe_url_1, data={})
     assert resp == {"result": "success", "message": "Unsubscribe successful"}
 
-    # Send a second notification via api
+    # Send a second notification via UI
     send_notification_to_one_recipient(
         driver,
         template_name,
