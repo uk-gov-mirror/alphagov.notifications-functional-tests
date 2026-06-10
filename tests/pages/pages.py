@@ -592,16 +592,6 @@ class DashboardPage(BasePage):
         element = self.wait_for_element(DashboardPage.h2)
         return element.text
 
-    # TODO: not used, delete?
-    def click_sms_templates(self):
-        element = self.wait_for_element(DashboardPage.sms_templates_link)
-        element.click()
-
-    # TODO: not used, delete?
-    def click_email_templates(self):
-        element = self.wait_for_element(DashboardPage.email_templates_link)
-        element.click()
-
     def click_uploads(self):
         element = self.wait_for_element(DashboardPage.uploads_link)
         element.click()
