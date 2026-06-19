@@ -35,7 +35,7 @@ def get_all_unique_seeder_user_tests(request: pytest.FixtureRequest):
 config = {
     # static
     "notification_retry_times": 15,
-    "notification_retry_interval": 5,
+    "notification_retry_interval": 10,
     "pdf_generation_retry_times": 40,
     "pdf_generation_retry_interval": 2,
     "verify_callback_retry_times": 40,
