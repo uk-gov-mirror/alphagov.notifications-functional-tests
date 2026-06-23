@@ -828,7 +828,7 @@ def _check_status_of_notification(page, functional_tests_service_id, reference_t
     notification_offset = page.find_notification_offset_for_client_reference(reference_to_check)
 
     status = page.get_notification_status_for_log_offset(notification_offset)
-    if isinstance(status_to_check, (list, tuple)):
-        assert status in status_to_check
-    else:
+    if isinstance(status_to_check, (str)):
         assert status == status_to_check
+    else:
+        assert status in status_to_check
