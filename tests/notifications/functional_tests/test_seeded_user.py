@@ -587,7 +587,7 @@ def test_view_precompiled_letter_message_log_delivered(driver, login_seeded_user
 
     retry_call(
         _check_status_of_notification,
-        fargs=[api_integration_page, config["service"]["id"], reference, NotificationStatuses.RECEIVED],
+        fargs=[api_integration_page, config["service"]["id"], reference, "received"],
         tries=config["notification_retry_times"],
         delay=config["notification_retry_interval"],
     )
@@ -611,7 +611,7 @@ def test_view_precompiled_letter_preview_delivered(driver, login_seeded_user, cl
 
     retry_call(
         _check_status_of_notification,
-        fargs=[api_integration_page, config["service"]["id"], reference, NotificationStatuses.RECEIVED],
+        fargs=[api_integration_page, config["service"]["id"], reference, "received"],
         tries=config["notification_retry_times"],
         delay=config["notification_retry_interval"],
     )
