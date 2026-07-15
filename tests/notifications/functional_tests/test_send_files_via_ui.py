@@ -290,6 +290,7 @@ def delete_template_from_view_email_template_page(driver, template_name):
     view_email_template_page = ViewEmailTemplatePage(driver)
     view_email_template_page.click_delete_template_link()
     view_email_template_page.click_template_deletion_confirmation_button()
+    view_email_template_page.wait_until_url_doesnt_contain("/delete")
 
     # confirm template has been deleted
     templates_page = ShowTemplatesPage(driver)
@@ -374,6 +375,7 @@ def add_file_to_email_template(driver, file_name, template_name):
     manage_a_file_page = ManageEmailTemplateFilePage(driver)
     assert manage_a_file_page.get_h1_text() == file_name
     manage_a_file_page.click_add_to_template()
+    manage_a_file_page.wait_until_url_doesnt_contain("/files/")
     # Confirm file has been attached to template on the Preview email template page
     assert_file_has_been_attached_to_email_template(driver, template_name)
 
