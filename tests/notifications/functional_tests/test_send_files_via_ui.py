@@ -290,6 +290,7 @@ def delete_template_from_view_email_template_page(driver, template_name):
     view_email_template_page = ViewEmailTemplatePage(driver)
     view_email_template_page.click_delete_template_link()
     view_email_template_page.click_template_deletion_confirmation_button()
+    view_email_template_page.wait_until_url_doesnt_contain("/delete")
 
     # confirm template has been deleted
     templates_page = ShowTemplatesPage(driver)
