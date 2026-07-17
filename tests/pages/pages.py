@@ -1413,6 +1413,11 @@ class InviteUserPage(BasePage):
     def send_invitation(self):
         element = self.wait_for_element(InviteUserPage.send_invitation_button)
         element.click()
+        # Wait for redirect to team members list after saving permissions or sending an invite.
+        # Without this, navigating away too quickly can abort the in-flight form POST.
+        # Note: if the form fails validation the page re-renders instead of redirecting,
+        # so this raises TimeoutException, which is the failure we'd want to see.
+        self.wait_until_url_matches(r"/services/[^/]+/users/?$")
 
     # support variants of this page with a 'Save' button instead of 'Send invitation' (both use the same locator)
     def click_save(self):
