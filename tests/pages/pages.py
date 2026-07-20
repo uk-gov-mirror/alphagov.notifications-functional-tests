@@ -1410,13 +1410,18 @@ class InviteUserPage(BasePage):
             element = self.wait_for_design_system_checkbox_or_radio(InviteUserPage.manage_api_keys_checkbox)
             self.select_checkbox_or_radio(element)
 
-    def send_invitation(self):
+    def _submit_and_wait_for_team_members(self):
         element = self.wait_for_element(InviteUserPage.send_invitation_button)
         element.click()
+        # If validation fails, the page does not redirect and this raises TimeoutException.
+        self.wait_until_url_matches(r"/services/[^/]+/users/?$")
+
+    def send_invitation(self):
+        self._submit_and_wait_for_team_members()
 
     # support variants of this page with a 'Save' button instead of 'Send invitation' (both use the same locator)
     def click_save(self):
-        self.send_invitation()
+        self._submit_and_wait_for_team_members()
 
     def uncheck_folder_permission_checkbox(self, folder_name):
         try:
