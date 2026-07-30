@@ -275,7 +275,7 @@ def test_upload_send_via_emergency_contact_list(driver, login_seeded_user, clien
 
     assert delete_page.get_h1() == filename
     assert delete_page.get_h2() == "1 saved " + ({"email": "email address", "sms": "phone number"}[message_type])
-    assert delete_page.get_table_data() == orig_preview_data
+    assert delete_page.get_list_data() == orig_preview_data
 
     delete_page.click_delete()
 
