@@ -1328,7 +1328,7 @@ class DeleteContactListPage(BasePage):
         """Returns a list of strings representing the text inside each <li>."""
         ul_element = self.wait_for_element(self.contact_list)
         items = ul_element.find_elements(*self.list_items)
-        return [item.text for item in items]
+        return [[item.text for item in items]]
 
 class CheckEmergencyContactListPage(PageWithCsvPreview):
     h1 = (By.CSS_SELECTOR, "h1")
