@@ -1305,9 +1305,8 @@ class DeleteContactListPage(BasePage):
     delete_button = (By.XPATH, "//button[normalize-space(.)='Yes, delete']")
     h1 = (By.CSS_SELECTOR, "h1")
     h2 = (By.CSS_SELECTOR, "h2")
-    table = (By.XPATH, "//table[.//tr/td]")
-    rows_from_table = (By.XPATH, ".//tr[./td]")
-    cells_from_row = (By.XPATH, "./td")
+    contact_list = (By.CSS_SELECTOR, "ul.contact-list")
+    list_items = (By.XPATH, "./li")
 
     def wait_until_current(self, time=10):
         return self.wait_until_url_matches(r"/delete(\?.*)?$", time=time)
@@ -1325,11 +1324,11 @@ class DeleteContactListPage(BasePage):
         element = self.wait_for_element(self.delete_button)
         element.click()
 
-    def get_table_data(self):
-        table = self.wait_for_element(self.table)
-        rows = table.find_elements(*self.rows_from_table)
-        return [[cell.text for cell in row.find_elements(*self.cells_from_row)] for row in rows]
-
+    def get_list_data(self):
+        """Returns a list of strings representing the text inside each <li>."""
+        ul_element = self.wait_for_element(self.contact_list)
+        items = ul_element.find_elements(*self.list_items)
+        return [item.text for item in items]
 
 class CheckEmergencyContactListPage(PageWithCsvPreview):
     h1 = (By.CSS_SELECTOR, "h1")
