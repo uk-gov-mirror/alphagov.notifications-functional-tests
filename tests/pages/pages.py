@@ -1901,7 +1901,7 @@ class UnsubscribeRequestConfirmationPage(BasePage):
 
 
 class UnsubscribeRequestReportsSummaryPage(BasePage):
-    unsubscribe_request_report_link = (By.CSS_SELECTOR, "th a")
+    unsubscribe_request_report_link = (By.CSS_SELECTOR, ".govuk-summary-list__key a")
 
     def click_latest_unsubscribe_request_report_by_link(self):
         element = self.wait_for_element(UnsubscribeRequestReportsSummaryPage.unsubscribe_request_report_link)
