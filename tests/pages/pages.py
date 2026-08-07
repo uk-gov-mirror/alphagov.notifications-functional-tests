@@ -699,6 +699,7 @@ class ShowTemplatesPage(PageWithStickyNavMixin, BasePage):
     email_radio = (By.CSS_SELECTOR, "input[type='radio'][value='email']")
     text_message_radio = (By.CSS_SELECTOR, "input[type='radio'][value='sms']")
     letter_radio = (By.CSS_SELECTOR, "input[type='radio'][value='letter']")
+    copy_an_existing_template = (By.CSS_SELECTOR, "input[type='radio'][value='copy-existing']")
 
     add_new_folder_textbox = BasePageElement(name="add_new_folder_name")
     add_to_new_folder_textbox = BasePageElement(name="move_to_new_folder_name")
@@ -759,6 +760,12 @@ class ShowTemplatesPage(PageWithStickyNavMixin, BasePage):
 
     def select_letter(self):
         self._select_template_type(self.letter_radio)
+
+    def select_copy_an_existing_template(self):
+        radio_element = self.wait_for_design_system_checkbox_or_radio(self.copy_an_existing_template)
+        self.select_checkbox_or_radio(radio_element)
+
+        self.click_continue()
 
     def select_template_checkbox(self, template_id):
         element = self.wait_for_design_system_checkbox_or_radio(self.template_checkbox(template_id))
@@ -1977,3 +1984,21 @@ class PreviewDownloadYourFilePage(PreviewSendFileViaEmailDownloadPages):
     def get_download_link(self):
         element = self.wait_for_element(PreviewDownloadYourFilePage.download_link)
         return element.get_attribute("href")
+
+
+class ChooseExistingTemplatePage(ShowTemplatesPage):
+    pass
+
+
+class CopyExistingTemplatePage(ShowTemplatesPage):
+    template_name = (By.ID, "name")
+    copy_template_button = (By.CSS_SELECTOR, "button[type='submit']")
+
+    def change_template_name(self, new_name):
+        element = self.wait_for_element(self.template_name)
+        element.clear()
+        element.send_keys(new_name)
+
+    def click_copy_this_template_button(self):
+        element = self.wait_for_element(self.copy_template_button)
+        element.click()
