@@ -852,6 +852,8 @@ class ViewLetterTemplatePage(ViewTemplatePage):
     edit_english_body = ViewLetterTemplatePageLocators.EDIT_ENGLISH_BODY
     attach_button = ViewLetterTemplatePageLocators.ATTACH_BUTTON
     change_language_button = ViewLetterTemplatePageLocators.CHANGE_LANGUAGE
+    delete_template_link = (By.XPATH, "//a[contains(text(), 'Delete this template')]")
+    template_deletion_confirmation_button = (By.CSS_SELECTOR, "button[type='submit'][name='delete']")
 
     def click_rename_link(self):
         element = self.wait_for_element(ViewLetterTemplatePage.rename_link)
@@ -871,6 +873,14 @@ class ViewLetterTemplatePage(ViewTemplatePage):
 
     def click_change_language(self):
         element = self.wait_for_element(self.change_language_button)
+        element.click()
+
+    def click_delete_template_link(self):
+        element = self.wait_for_element(self.delete_template_link)
+        element.click()
+
+    def click_template_deletion_confirmation_button(self):
+        element = self.wait_for_element(self.template_deletion_confirmation_button)
         element.click()
 
 
