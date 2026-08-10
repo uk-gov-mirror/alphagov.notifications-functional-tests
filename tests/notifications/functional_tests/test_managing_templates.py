@@ -2,11 +2,6 @@ import uuid
 
 import pytest
 
-from tests.notifications.functional_tests.test_send_files_via_ui import (
-    delete_template_from_view_email_template_page,
-    delete_template_from_view_letter_template_page,
-    delete_template_from_view_sms_template_page,
-)
 from tests.pages import (
     ChooseExistingTemplatePage,
     CopyExistingTemplatePage,
@@ -14,6 +9,7 @@ from tests.pages import (
     ViewEmailTemplatePage,
     ViewLetterTemplatePage,
     ViewSMSTemplatePage,
+    delete_template_from_view_template_page,
 )
 from tests.test_utils import (
     create_email_template,
@@ -53,10 +49,10 @@ def test_copying_an_existing_email_template(driver, login_seeded_user):
 
     # Delete created email templates
     templates_page.click_template_by_link_text(new_template_name)
-    delete_template_from_view_email_template_page(driver, new_template_name)
+    delete_template_from_view_template_page(driver, new_template_name, view_template_page)
     templates_page.click_template_by_link_text(template_name)
     assert view_template_page.get_h1_text() == template_name
-    delete_template_from_view_email_template_page(driver, template_name)
+    delete_template_from_view_template_page(driver, template_name, view_template_page)
 
 
 @recordtime
@@ -88,10 +84,10 @@ def test_copying_an_existing_sms_template(driver, login_seeded_user):
 
     # Delete created sms templates
     templates_page.click_template_by_link_text(new_template_name)
-    delete_template_from_view_sms_template_page(driver, new_template_name)
+    delete_template_from_view_template_page(driver, new_template_name, view_template_page)
     templates_page.click_template_by_link_text(template_name)
     assert view_template_page.get_h1_text() == template_name
-    delete_template_from_view_sms_template_page(driver, template_name)
+    delete_template_from_view_template_page(driver, template_name, view_template_page)
 
 
 @recordtime
@@ -123,10 +119,10 @@ def test_copying_an_existing_letter_template(driver, login_seeded_user):
 
     # Delete created letter templates
     templates_page.click_template_by_link_text(new_template_name)
-    delete_template_from_view_letter_template_page(driver, new_template_name)
+    delete_template_from_view_template_page(driver, new_template_name, view_template_page)
     templates_page.click_template_by_link_text(template_name)
     assert view_template_page.get_h1_text() == template_name
-    delete_template_from_view_letter_template_page(driver, template_name)
+    delete_template_from_view_template_page(driver, template_name, view_template_page)
 
 
 def copy_an_existing_template(driver, template_name, templates_page, view_template_page, notification_type):

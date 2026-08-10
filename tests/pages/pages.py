@@ -2026,3 +2026,14 @@ class CopyExistingTemplatePage(ShowTemplatesPage):
     def click_copy_this_template_button(self):
         element = self.wait_for_element(self.copy_template_button)
         element.click()
+
+
+def delete_template_from_view_template_page(driver, template_name, view_template_page):
+    view_template_page.click_delete_template_link()
+    view_template_page.click_template_deletion_confirmation_button()
+    view_template_page.wait_until_url_doesnt_contain("/delete")
+
+    # confirm template has been deleted
+    templates_page = ShowTemplatesPage(driver)
+    assert templates_page.get_h1_text() == "Templates"
+    assert template_name not in templates_page.get_all_listed_templates()
