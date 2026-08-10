@@ -1,5 +1,7 @@
 import uuid
 
+import pytest
+
 from tests.notifications.functional_tests.test_send_files_via_ui import delete_template_from_view_email_template_page, \
     delete_template_from_view_sms_template_page, delete_template_from_view_letter_template_page
 from tests.pages import ShowTemplatesPage, ChooseExistingTemplatePage, CopyExistingTemplatePage, ViewEmailTemplatePage, \
@@ -9,6 +11,7 @@ from tests.test_utils import recordtime, go_to_templates_page, create_email_temp
 
 
 @recordtime
+@pytest.mark.xdist_group(name="copy-an-existing-template")
 def test_copying_an_existing_email_template(driver, login_seeded_user):
     go_to_templates_page(driver)
     content = "This is a test template"
@@ -45,6 +48,7 @@ def test_copying_an_existing_email_template(driver, login_seeded_user):
 
 
 @recordtime
+@pytest.mark.xdist_group(name="copy-an-existing-template")
 def test_copying_an_existing_sms_template(driver, login_seeded_user):
     go_to_templates_page(driver)
     content = "This is a test template"
@@ -81,6 +85,7 @@ def test_copying_an_existing_sms_template(driver, login_seeded_user):
 
 
 @recordtime
+@pytest.mark.xdist_group(name="copy-an-existing-template")
 def test_copying_an_existing_letter_template(driver, login_seeded_user):
     go_to_templates_page(driver)
     content = "This is a test template"
