@@ -930,7 +930,6 @@ class ViewSMSTemplatePage(ViewTemplatePage):
     delete_template_link = (By.XPATH, "//a[contains(text(), 'Delete this template')]")
     template_deletion_confirmation_button = (By.CSS_SELECTOR, "button[type='submit'][name='delete']")
 
-
     def click_delete_template_link(self):
         element = self.wait_for_element(self.delete_template_link)
         element.click()
@@ -1360,6 +1359,7 @@ class DeleteContactListPage(BasePage):
         ul_element = self.wait_for_element(self.contact_list)
         items = ul_element.find_elements(*self.list_items)
         return [[item.text for item in items]]
+
 
 class CheckEmergencyContactListPage(PageWithCsvPreview):
     h1 = (By.CSS_SELECTOR, "h1")

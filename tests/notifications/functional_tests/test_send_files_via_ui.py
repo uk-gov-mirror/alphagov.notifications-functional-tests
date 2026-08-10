@@ -27,7 +27,9 @@ from tests.pages import (
     SendViaCsvPreviewPage,
     SentEmailMessagePage,
     ShowTemplatesPage,
-    ViewEmailTemplatePage, ViewSMSTemplatePage, ViewLetterTemplatePage,
+    ViewEmailTemplatePage,
+    ViewLetterTemplatePage,
+    ViewSMSTemplatePage,
 )
 from tests.test_utils import (
     create_email_template,
