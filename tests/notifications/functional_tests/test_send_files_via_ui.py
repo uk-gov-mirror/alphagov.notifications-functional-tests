@@ -27,7 +27,7 @@ from tests.pages import (
     SendViaCsvPreviewPage,
     SentEmailMessagePage,
     ShowTemplatesPage,
-    ViewEmailTemplatePage,
+    ViewEmailTemplatePage, ViewSMSTemplatePage,
 )
 from tests.test_utils import (
     create_email_template,
@@ -291,6 +291,18 @@ def delete_template_from_view_email_template_page(driver, template_name):
     view_email_template_page.click_delete_template_link()
     view_email_template_page.click_template_deletion_confirmation_button()
     view_email_template_page.wait_until_url_doesnt_contain("/delete")
+
+    # confirm template has been deleted
+    templates_page = ShowTemplatesPage(driver)
+    assert templates_page.get_h1_text() == "Templates"
+    assert template_name not in templates_page.get_all_listed_templates()
+
+
+def delete_template_from_view_sms_template_page(driver, template_name):
+    view_sms_template_page = ViewSMSTemplatePage(driver)
+    view_sms_template_page.click_delete_template_link()
+    view_sms_template_page.click_template_deletion_confirmation_button()
+    view_sms_template_page.wait_until_url_doesnt_contain("/delete")
 
     # confirm template has been deleted
     templates_page = ShowTemplatesPage(driver)

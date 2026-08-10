@@ -916,6 +916,20 @@ class ViewEmailTemplatePage(ViewTemplatePage):
         element.click()
 
 
+class ViewSMSTemplatePage(ViewTemplatePage):
+    delete_template_link = (By.XPATH, "//a[contains(text(), 'Delete this template')]")
+    template_deletion_confirmation_button = (By.CSS_SELECTOR, "button[type='submit'][name='delete']")
+
+
+    def click_delete_template_link(self):
+        element = self.wait_for_element(self.delete_template_link)
+        element.click()
+
+    def click_template_deletion_confirmation_button(self):
+        element = self.wait_for_element(self.template_deletion_confirmation_button)
+        element.click()
+
+
 class AddFileToEmailTemplatePage(BasePage):
     choose_file_button = AddFileToEmailTemplatePageLocators.CHOOSE_FILE_BUTTON
     file_input = AddFileToEmailTemplatePageLocators.FILE_INPUT
