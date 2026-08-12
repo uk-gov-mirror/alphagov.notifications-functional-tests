@@ -166,7 +166,6 @@ def do_user_add_new_service(driver):
     # for functional tests to run, there needs to be a functional test organisation that:
     # * has the `ask to join a service` flag enabled
     # * has the functional tests email domain (by default digital.cabinet-office.gov.uk) set as a known domain
-    your_service_page.wait_until_current()
     your_service_page.add_new_service()
 
     add_service_page = AddServicePage(driver)

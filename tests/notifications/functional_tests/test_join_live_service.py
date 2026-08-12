@@ -47,7 +47,6 @@ def _do_approver_sign_in(driver):
 
 def _do_request_to_join_service(driver):
     add_service_page = YourServicesPage(driver)
-    add_service_page.wait_until_current()
     add_service_page.join_existing_service()
 
     add_service_page.wait_until_url_contains("/join-a-service/choose")
