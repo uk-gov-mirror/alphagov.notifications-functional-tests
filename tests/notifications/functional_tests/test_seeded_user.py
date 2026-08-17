@@ -298,7 +298,8 @@ def test_edit_and_delete_email_template(driver, login_seeded_user):
 
     create_email_template(driver, name=template_name, content=None)
     go_to_templates_page(driver)
-    current_templates = [x.text for x in driver.find_elements(By.CLASS_NAME, "template-list-item-label")]
+    templates_page = ShowTemplatesPage(driver)
+    current_templates = templates_page.get_all_listed_templates()
     assert template_name in current_templates
 
     new_template_name = f"{template_name} v2"
@@ -311,13 +312,15 @@ def test_edit_and_delete_email_template(driver, login_seeded_user):
     )
 
     go_to_templates_page(driver)
-    current_templates = [x.text for x in driver.find_elements(By.CLASS_NAME, "template-list-item-label")]
+    templates_page = ShowTemplatesPage(driver)
+    current_templates = templates_page.get_all_listed_templates()
 
-    assert template_name not in current_templates
+    # Check new name is present first (confirms page updated), then check old name is gone
     assert new_template_name in current_templates
+    assert template_name not in current_templates
 
     delete_template(driver, template_name)
-    current_templates = [x.text for x in driver.find_elements(By.CLASS_NAME, "template-list-item-label")]
+    current_templates = templates_page.get_all_listed_templates()
 
     assert template_name not in current_templates
     assert new_template_name not in current_templates
@@ -330,7 +333,8 @@ def test_edit_and_delete_sms_template(driver, login_seeded_user):
 
     create_sms_template(driver, name=template_name, content=None)
     go_to_templates_page(driver)
-    current_templates = [x.text for x in driver.find_elements(By.CLASS_NAME, "template-list-item-label")]
+    templates_page = ShowTemplatesPage(driver)
+    current_templates = templates_page.get_all_listed_templates()
 
     assert template_name in current_templates
 
@@ -343,13 +347,15 @@ def test_edit_and_delete_sms_template(driver, login_seeded_user):
     )
 
     go_to_templates_page(driver)
-    current_templates = [x.text for x in driver.find_elements(By.CLASS_NAME, "template-list-item-label")]
+    templates_page = ShowTemplatesPage(driver)
+    current_templates = templates_page.get_all_listed_templates()
 
-    assert template_name not in current_templates
+    # Check new name is present first (confirms page updated), then check old name is gone
     assert new_template_name in current_templates
+    assert template_name not in current_templates
 
     delete_template(driver, new_template_name)
-    current_templates = [x.text for x in driver.find_elements(By.CLASS_NAME, "template-list-item-label")]
+    current_templates = templates_page.get_all_listed_templates()
 
     assert template_name not in current_templates
     assert new_template_name not in current_templates
@@ -362,12 +368,14 @@ def test_edit_and_delete_letter_template(driver, login_seeded_user):
 
     create_letter_template(driver, name=template_name, content=None)
     go_to_templates_page(driver)
-    current_templates = [x.text for x in driver.find_elements(By.CLASS_NAME, "template-list-item-label")]
+    templates_page = ShowTemplatesPage(driver)
+    current_templates = templates_page.get_all_listed_templates()
 
     assert template_name in current_templates
 
     delete_template(driver, template_name)
-    current_templates = [x.text for x in driver.find_elements(By.CLASS_NAME, "template-list-item-label")]
+    templates_page = ShowTemplatesPage(driver)
+    current_templates = templates_page.get_all_listed_templates()
 
     assert template_name not in current_templates
 
@@ -430,7 +438,8 @@ def test_send_bilingual_letter(driver, login_seeded_user, download_directory):
 
     change_language_page.click_templates()
     delete_template(driver, template_name)
-    current_templates = [x.text for x in driver.find_elements(By.CLASS_NAME, "template-list-item-label")]
+    templates_page = ShowTemplatesPage(driver)
+    current_templates = templates_page.get_all_listed_templates()
 
     assert template_name not in current_templates
 
@@ -730,7 +739,8 @@ def test_creating_moving_and_deleting_template_folders(driver, login_seeded_user
     view_folder_page.click_manage_folder()
     manage_folder_page.delete_folder()
     manage_folder_page.confirm_delete_folder()
-    current_folders = [x.text for x in driver.find_elements(By.CLASS_NAME, "template-list-item-label")]
+    templates_page = ShowTemplatesPage(driver)
+    current_folders = templates_page.get_all_listed_templates()
     if len(current_folders) == 0:
         current_folders = [x.text for x in driver.find_elements(By.CLASS_NAME, "message-name")]
     # assert folder not visible
