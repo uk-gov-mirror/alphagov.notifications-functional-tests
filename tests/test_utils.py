@@ -316,6 +316,7 @@ def go_to_templates_page(driver, service="service"):
     dashboard_page = DashboardPage(driver)
     dashboard_page.go_to_dashboard_for_service(config[service]["id"])
     dashboard_page.click_templates()
+    return dashboard_page
 
 
 def go_to_view_template_page(driver, template_name):

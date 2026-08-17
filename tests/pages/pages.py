@@ -699,6 +699,7 @@ class ShowTemplatesPage(PageWithStickyNavMixin, BasePage):
     email_radio = (By.CSS_SELECTOR, "input[type='radio'][value='email']")
     text_message_radio = (By.CSS_SELECTOR, "input[type='radio'][value='sms']")
     letter_radio = (By.CSS_SELECTOR, "input[type='radio'][value='letter']")
+    copy_an_existing_template = (By.CSS_SELECTOR, "input[type='radio'][value='copy-existing']")
 
     add_new_folder_textbox = BasePageElement(name="add_new_folder_name")
     add_to_new_folder_textbox = BasePageElement(name="move_to_new_folder_name")
@@ -759,6 +760,12 @@ class ShowTemplatesPage(PageWithStickyNavMixin, BasePage):
 
     def select_letter(self):
         self._select_template_type(self.letter_radio)
+
+    def select_copy_an_existing_template(self):
+        radio_element = self.wait_for_design_system_checkbox_or_radio(self.copy_an_existing_template)
+        self.select_checkbox_or_radio(radio_element)
+
+        self.click_continue()
 
     def select_template_checkbox(self, template_id):
         element = self.wait_for_design_system_checkbox_or_radio(self.template_checkbox(template_id))
@@ -845,6 +852,8 @@ class ViewLetterTemplatePage(ViewTemplatePage):
     edit_english_body = ViewLetterTemplatePageLocators.EDIT_ENGLISH_BODY
     attach_button = ViewLetterTemplatePageLocators.ATTACH_BUTTON
     change_language_button = ViewLetterTemplatePageLocators.CHANGE_LANGUAGE
+    delete_template_link = (By.XPATH, "//a[contains(text(), 'Delete this template')]")
+    template_deletion_confirmation_button = (By.CSS_SELECTOR, "button[type='submit'][name='delete']")
 
     def click_rename_link(self):
         element = self.wait_for_element(ViewLetterTemplatePage.rename_link)
@@ -864,6 +873,14 @@ class ViewLetterTemplatePage(ViewTemplatePage):
 
     def click_change_language(self):
         element = self.wait_for_element(self.change_language_button)
+        element.click()
+
+    def click_delete_template_link(self):
+        element = self.wait_for_element(self.delete_template_link)
+        element.click()
+
+    def click_template_deletion_confirmation_button(self):
+        element = self.wait_for_element(self.template_deletion_confirmation_button)
         element.click()
 
 
@@ -906,6 +923,19 @@ class ViewEmailTemplatePage(ViewTemplatePage):
 
     def click_file_link_text(self, link_text):
         element = self.wait_for_element((By.XPATH, f"//a[contains(text(), '{link_text}')]"))
+        element.click()
+
+
+class ViewSMSTemplatePage(ViewTemplatePage):
+    delete_template_link = (By.XPATH, "//a[contains(text(), 'Delete this template')]")
+    template_deletion_confirmation_button = (By.CSS_SELECTOR, "button[type='submit'][name='delete']")
+
+    def click_delete_template_link(self):
+        element = self.wait_for_element(self.delete_template_link)
+        element.click()
+
+    def click_template_deletion_confirmation_button(self):
+        element = self.wait_for_element(self.template_deletion_confirmation_button)
         element.click()
 
 
@@ -1329,6 +1359,7 @@ class DeleteContactListPage(BasePage):
         ul_element = self.wait_for_element(self.contact_list)
         items = ul_element.find_elements(*self.list_items)
         return [[item.text for item in items]]
+
 
 class CheckEmergencyContactListPage(PageWithCsvPreview):
     h1 = (By.CSS_SELECTOR, "h1")
@@ -1977,3 +2008,32 @@ class PreviewDownloadYourFilePage(PreviewSendFileViaEmailDownloadPages):
     def get_download_link(self):
         element = self.wait_for_element(PreviewDownloadYourFilePage.download_link)
         return element.get_attribute("href")
+
+
+class ChooseExistingTemplatePage(ShowTemplatesPage):
+    pass
+
+
+class CopyExistingTemplatePage(ShowTemplatesPage):
+    template_name = (By.ID, "name")
+    copy_template_button = (By.CSS_SELECTOR, "button[type='submit']")
+
+    def change_template_name(self, new_name):
+        element = self.wait_for_element(self.template_name)
+        element.clear()
+        element.send_keys(new_name)
+
+    def click_copy_this_template_button(self):
+        element = self.wait_for_element(self.copy_template_button)
+        element.click()
+
+
+def delete_template_from_view_template_page(driver, template_name, view_template_page):
+    view_template_page.click_delete_template_link()
+    view_template_page.click_template_deletion_confirmation_button()
+    view_template_page.wait_until_url_doesnt_contain("/delete")
+
+    # confirm template has been deleted
+    templates_page = ShowTemplatesPage(driver)
+    assert templates_page.get_h1_text() == "Templates"
+    assert template_name not in templates_page.get_all_listed_templates()
