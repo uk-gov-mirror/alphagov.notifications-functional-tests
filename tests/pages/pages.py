@@ -1692,6 +1692,21 @@ class ServiceSettingsPage(BasePage):
         element = self.wait_for_element(ServiceSettingsLocators.CHANGE_SERVICE_NAME_LINK)
         element.click()
 
+    def click_delete_service(self):
+        element = self.wait_for_element((By.PARTIAL_LINK_TEXT, "Delete this service"))
+        element.click()
+
+
+class DeleteServicePage(BasePage):
+    confirm_delete_button = (By.CSS_SELECTOR, ".govuk-button.govuk-button--warning")
+
+    def wait_until_current(self):
+        return self.wait_until_url_contains("/service-settings/archive")
+
+    def confirm_delete_service(self):
+        element = self.wait_for_element(self.confirm_delete_button)
+        element.click()
+
 
 class ChangeName(BasePage):
     def go_to_change_service_name(self, service_id):
