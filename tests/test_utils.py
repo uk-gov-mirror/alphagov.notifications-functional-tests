@@ -21,6 +21,7 @@ from tests.pages import (
     AddServicePage,
     ConfirmEditLetterTemplatePage,
     DashboardPage,
+    DeleteServicePage,
     EditEmailTemplatePage,
     EditLetterTemplatePage,
     EditSmsTemplatePage,
@@ -33,6 +34,7 @@ from tests.pages import (
     SendLetterPreviewPage,
     SendOneRecipientPage,
     SendSetSenderPage,
+    ServiceSettingsPage,
     ShowTemplatesPage,
     SmsSenderPage,
     TeamMembersPage,
@@ -166,7 +168,6 @@ def do_user_add_new_service(driver):
     # for functional tests to run, there needs to be a functional test organisation that:
     # * has the `ask to join a service` flag enabled
     # * has the functional tests email domain (by default digital.cabinet-office.gov.uk) set as a known domain
-    your_service_page.wait_until_current()
     your_service_page.add_new_service()
 
     add_service_page = AddServicePage(driver)
@@ -651,3 +652,20 @@ def pdf_page_has_text(pdf_page, expected_text, normalise_whitespace=True):
         page_text = re.sub(r"\s+", " ", page_text.replace("\n", " "))
 
     return expected_text in page_text
+
+
+def delete_service(driver, service_id=None):
+    dashboard_page = DashboardPage(driver)
+    service_settings = ServiceSettingsPage(driver)
+    delete_service_page = DeleteServicePage(driver)
+
+    if service_id:
+        dashboard_page.go_to_dashboard_for_service(service_id)
+    else:
+        dashboard_page.go_to_dashboard_for_service()
+
+    dashboard_page.click_settings()
+    service_settings.click_delete_service()
+
+    delete_service_page.wait_until_current()
+    delete_service_page.confirm_delete_service()

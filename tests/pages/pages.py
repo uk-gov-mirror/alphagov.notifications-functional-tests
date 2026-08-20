@@ -404,11 +404,18 @@ class YourServicesPage(BasePage):
         return self.wait_until_url_contains(self.base_url + "/your-services")
 
     def join_existing_service(self):
+        self.wait_until_current()
         element = self.wait_for_element(YourServicesPage.join_existing_service_button)
         element.click()
 
     def add_new_service(self):
+        self.wait_until_current()
         element = self.wait_for_element(YourServicesPage.add_a_new_service_button)
+        element.click()
+
+    def go_to_service(self, service_name):
+        self.wait_until_current()
+        element = self.wait_for_element((By.LINK_TEXT, service_name))
         element.click()
 
 
@@ -1683,6 +1690,21 @@ class SendViaContactListPreviewPage(PageWithCsvPreview, PageWithSendToMultipleBu
 class ServiceSettingsPage(BasePage):
     def go_to_change_service_name(self):
         element = self.wait_for_element(ServiceSettingsLocators.CHANGE_SERVICE_NAME_LINK)
+        element.click()
+
+    def click_delete_service(self):
+        element = self.wait_for_element((By.PARTIAL_LINK_TEXT, "Delete this service"))
+        element.click()
+
+
+class DeleteServicePage(BasePage):
+    confirm_delete_button = (By.CSS_SELECTOR, ".govuk-button.govuk-button--warning")
+
+    def wait_until_current(self):
+        return self.wait_until_url_contains("/service-settings/archive")
+
+    def confirm_delete_service(self):
+        element = self.wait_for_element(self.confirm_delete_button)
         element.click()
 
 
