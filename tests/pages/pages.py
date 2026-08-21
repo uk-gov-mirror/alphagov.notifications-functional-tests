@@ -312,7 +312,7 @@ class PageWithStickyNavMixin:
             # Fallback to the url from the globally imported config
             base_url = config["notify_admin_url"]
 
-        module_url = f"{base_url}/assets/javascripts/esm/stick-to-window-when-scrolling.mjs"
+        module_url = f"/assets/javascripts/esm/stick-to-window-when-scrolling.mjs"
 
         # Flattened directly onto window
         prop_name = "stickAtBottomWhenScrolling" if stuckToBottom else "stickAtTopWhenScrolling"
