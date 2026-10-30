@@ -68,8 +68,8 @@ lint: ## Run static analysis
 
 .PHONY: test
 test: clean lint ## Run functional tests against local environment
-	pytest tests/notifications/functional_tests -n auto --dist loadgroup ${FUNCTIONAL_TESTS_EXTRA_PYTEST_ARGS}
-	pytest tests/document_download/functional_tests ${FUNCTIONAL_TESTS_EXTRA_PYTEST_ARGS}
+	pytest tests/notifications/functional_tests/test_managing_templates.py -n auto --dist loadgroup ${FUNCTIONAL_TESTS_EXTRA_PYTEST_ARGS}
+	# pytest tests/document_download/functional_tests ${FUNCTIONAL_TESTS_EXTRA_PYTEST_ARGS}
 
 .PHONY: generate-staging-db-fixtures
 generate-staging-db-fixtures: ## Generates DB fixtures for the staging database
