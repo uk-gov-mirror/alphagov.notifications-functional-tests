@@ -44,6 +44,7 @@ def test_copying_an_existing_template(driver, login_seeded_user, template_type, 
     choose_existing_template_page.wait_until_url_contains("templates/copy")
     assert choose_existing_template_page.get_h1_text() == "Choose an existing template to copy"
     choose_existing_template_page.click_template_by_link_text(template_name)
+    assert True == False
     copy_existing_template_page = CopyExistingTemplatePage(driver)
     assert copy_existing_template_page.get_h1_text() == "Copy an existing template"
     new_template_name = f"Functional Tests - new copied {template_type} template - {uuid.uuid4()}"
